@@ -125,10 +125,18 @@
 
   .bar-row{
     display:flex; align-items:center; gap:8px; width:100%;
-    background:var(--panel); border:1px solid var(--line); border-radius:10px;
-    padding:9px 12px; margin-bottom:7px; text-decoration:none; color:inherit;
-    box-shadow:0 1px 6px rgba(28,79,120,.05);
+    background:linear-gradient(180deg, #FFFFFF 0%, #F5FBFE 100%);
+    border:1.5px solid var(--water); border-radius:12px;
+    padding:9px 12px; margin-bottom:9px; text-decoration:none; color:inherit;
+    box-shadow:0 3px 0 rgba(42,147,234,.18), 0 4px 10px rgba(28,79,120,.12);
+    transition:transform .08s ease, box-shadow .08s ease;
   }
+  .bar-row:active{
+    transform:translateY(2px);
+    box-shadow:0 1px 0 rgba(42,147,234,.18), 0 2px 5px rgba(28,79,120,.12);
+  }
+  .list-hint{font-size:12px; color:var(--water); font-weight:700; margin:0 0 10px; display:flex; align-items:center; gap:5px;}
+  .list-hint::before{content:'👇'; font-size:13px;}
   .bar-name{font-family:'Shippori Mincho',serif; font-weight:700; font-size:12.5px; color:var(--navy); width:6.3em; flex-shrink:0; white-space:nowrap;}
   .bar-slot{flex:1 1 auto; min-width:0; height:9px; border-radius:5px; overflow:hidden; background:var(--panel-soft); display:flex;}
   .bar-fill{height:100%; display:flex;}
@@ -137,6 +145,7 @@
   .bar-seg.sairyou{background:var(--water);}
   .bar-seg.mienai{background:var(--mienai);}
   .bar-amount{font-size:11px; color:var(--ink-soft); font-weight:600; flex-shrink:0; white-space:nowrap; width:4.6em; text-align:right;}
+  .bar-arrow{font-size:20px; color:var(--water); font-weight:700; flex-shrink:0; line-height:1; margin-left:2px;}
 
   .progress-badge{display:none;}
   .progress-badge.show{display:inline-block; font-size:9px; font-weight:700; padding:2px 6px; border-radius:10px; background:var(--water-soft); color:var(--water); flex-shrink:0;}
@@ -213,72 +222,85 @@
     <span><i class="c-mienai"></i>カード外</span>
   </div>
 
+  <p class="list-hint">款をタップして、クイズ・審査シミュレーションに挑戦</p>
+
   
   <a class="bar-row" href="https://chinjouojisan.github.io/minseihi07/" target="_blank" rel="noopener" data-save-key="kessan_challenge_minsei_v1" data-total="55" id="card-0">
     <span class="bar-name">民生費</span>
     <span class="bar-slot"><span class="bar-fill" style="width:100.0%"><span class="bar-seg houtei" style="width:64.0%"></span><span class="bar-seg sairyou" style="width:9.9%"></span><span class="bar-seg mienai" style="width:26.1%"></span></span></span>
     <span class="bar-amount">471.2億円</span>
     <span class="progress-badge" id="badge-0"></span>
+    <span class="bar-arrow">›</span>
   </a>
   <a class="bar-row" href="https://chinjouojisan.github.io/soumuhi07/" target="_blank" rel="noopener" data-save-key="kessan_challenge_soumu_v1" data-total="29" id="card-1">
     <span class="bar-name">総務費</span>
     <span class="bar-slot"><span class="bar-fill" style="width:26.49%"><span class="bar-seg houtei" style="width:1.8%"></span><span class="bar-seg sairyou" style="width:27.3%"></span><span class="bar-seg mienai" style="width:70.9%"></span></span></span>
     <span class="bar-amount">124.8億円</span>
     <span class="progress-badge" id="badge-1"></span>
+    <span class="bar-arrow">›</span>
   </a>
   <a class="bar-row" href="https://chinjouojisan.github.io/dobokuhi07/" target="_blank" rel="noopener" data-save-key="kessan_challenge_doboku_v1" data-total="23" id="card-2">
     <span class="bar-name">土木費</span>
     <span class="bar-slot"><span class="bar-fill" style="width:23.62%"><span class="bar-seg houtei" style="width:0.0%"></span><span class="bar-seg sairyou" style="width:38.4%"></span><span class="bar-seg mienai" style="width:61.6%"></span></span></span>
     <span class="bar-amount">111.3億円</span>
     <span class="progress-badge" id="badge-2"></span>
+    <span class="bar-arrow">›</span>
   </a>
   <a class="bar-row" href="https://chinjouojisan.github.io/kyouikuhi07/" target="_blank" rel="noopener" data-save-key="kessan_challenge_kyouiku_v1" data-total="29" id="card-3">
     <span class="bar-name">教育費</span>
     <span class="bar-slot"><span class="bar-fill" style="width:20.0%"><span class="bar-seg houtei" style="width:13.9%"></span><span class="bar-seg sairyou" style="width:36.2%"></span><span class="bar-seg mienai" style="width:49.9%"></span></span></span>
     <span class="bar-amount">94.2億円</span>
     <span class="progress-badge" id="badge-3"></span>
+    <span class="bar-arrow">›</span>
   </a>
   <a class="bar-row" href="https://chinjouojisan.github.io/kousaihi07/" target="_blank" rel="noopener" data-save-key="kessan_challenge_kosai_v1" data-total="2" id="card-4">
     <span class="bar-name">公債費</span>
     <span class="bar-slot"><span class="bar-fill" style="width:18.29%"><span class="bar-seg houtei" style="width:100.0%"></span><span class="bar-seg sairyou" style="width:0.0%"></span><span class="bar-seg mienai" style="width:0.0%"></span></span></span>
     <span class="bar-amount">86.2億円</span>
     <span class="progress-badge" id="badge-4"></span>
+    <span class="bar-arrow">›</span>
   </a>
   <a class="bar-row" href="https://chinjouojisan.github.io/eiseihi07/" target="_blank" rel="noopener" data-save-key="kessan_challenge_eisei_v1" data-total="29" id="card-5">
     <span class="bar-name">衛生費</span>
     <span class="bar-slot"><span class="bar-fill" style="width:15.9%"><span class="bar-seg houtei" style="width:16.8%"></span><span class="bar-seg sairyou" style="width:25.6%"></span><span class="bar-seg mienai" style="width:57.6%"></span></span></span>
     <span class="bar-amount">74.9億円</span>
     <span class="progress-badge" id="badge-5"></span>
+    <span class="bar-arrow">›</span>
   </a>
   <a class="bar-row" href="https://chinjouojisan.github.io/shoubouhi07/" target="_blank" rel="noopener" data-save-key="kessan_challenge_shobo_v1" data-total="3" id="card-6">
     <span class="bar-name">消防費</span>
     <span class="bar-slot"><span class="bar-fill" style="width:8.83%"><span class="bar-seg houtei" style="width:0.0%"></span><span class="bar-seg sairyou" style="width:22.3%"></span><span class="bar-seg mienai" style="width:77.7%"></span></span></span>
     <span class="bar-amount">41.6億円</span>
     <span class="progress-badge" id="badge-6"></span>
+    <span class="bar-arrow">›</span>
   </a>
   <a class="bar-row" href="https://chinjouojisan.github.io/shoukouhi07/" target="_blank" rel="noopener" data-save-key="kessan_challenge_shoko_v1" data-total="9" id="card-7">
     <span class="bar-name">商工費</span>
     <span class="bar-slot"><span class="bar-fill" style="width:4.22%"><span class="bar-seg houtei" style="width:0.0%"></span><span class="bar-seg sairyou" style="width:91.1%"></span><span class="bar-seg mienai" style="width:8.9%"></span></span></span>
     <span class="bar-amount">19.9億円</span>
     <span class="progress-badge" id="badge-7"></span>
+    <span class="bar-arrow">›</span>
   </a>
   <a class="bar-row" href="https://chinjouojisan.github.io/nourinsuisanhi07/" target="_blank" rel="noopener" data-save-key="kessan_challenge_norinsuisan_v1" data-total="9" id="card-8">
     <span class="bar-name">農林水産業費</span>
     <span class="bar-slot"><span class="bar-fill" style="width:4%"><span class="bar-seg houtei" style="width:0.0%"></span><span class="bar-seg sairyou" style="width:41.9%"></span><span class="bar-seg mienai" style="width:58.1%"></span></span></span>
     <span class="bar-amount">7.3億円</span>
     <span class="progress-badge" id="badge-8"></span>
+    <span class="bar-arrow">›</span>
   </a>
   <a class="bar-row" href="https://chinjouojisan.github.io/gikaihi07/" target="_blank" rel="noopener" data-save-key="kessan_challenge_gikai_v1" data-total="2" id="card-9">
     <span class="bar-name">議会費</span>
     <span class="bar-slot"><span class="bar-fill" style="width:4%"><span class="bar-seg houtei" style="width:100.0%"></span><span class="bar-seg sairyou" style="width:0.0%"></span><span class="bar-seg mienai" style="width:0.0%"></span></span></span>
     <span class="bar-amount">5.2億円</span>
     <span class="progress-badge" id="badge-9"></span>
+    <span class="bar-arrow">›</span>
   </a>
   <a class="bar-row" href="https://chinjouojisan.github.io/roudouhi07/" target="_blank" rel="noopener" data-save-key="kessan_challenge_roudo_v1" data-total="3" id="card-10">
     <span class="bar-name">労働費</span>
     <span class="bar-slot"><span class="bar-fill" style="width:4%"><span class="bar-seg houtei" style="width:0.0%"></span><span class="bar-seg sairyou" style="width:87.9%"></span><span class="bar-seg mienai" style="width:12.1%"></span></span></span>
     <span class="bar-amount">2.0億円</span>
     <span class="progress-badge" id="badge-10"></span>
+    <span class="bar-arrow">›</span>
   </a>
 
   <div class="summary-box">
