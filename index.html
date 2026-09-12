@@ -198,6 +198,11 @@
   }
   .report-btn:active{opacity:.85;}
   .report-status{font-size:12px; color:var(--ink-soft); margin:10px 0 0; text-align:center;}
+  .diag-result{margin-top:12px;}
+  .diag-empty{font-size:12.5px; color:var(--ink-soft); margin:0;}
+  .diag-type{font-family:'Shippori Mincho',serif; font-weight:700; font-size:20px; color:var(--water); text-align:center; margin:4px 0 8px;}
+  .diag-desc{font-size:12.5px; color:var(--ink-soft); line-height:1.7; margin:0 0 8px; text-align:center;}
+  .diag-stat{font-size:11.5px; color:var(--ink-soft); margin:4px 0 0; padding-top:8px; border-top:1px dashed var(--line);}
   .footer-note{font-size:11.5px; color:var(--ink-soft); margin-top:24px; line-height:1.8; text-align:center;}
 </style>
 </head>
@@ -454,6 +459,14 @@
     </div>
   </div>
 
+  <div class="section-title">あなたの決算タイプを診断する</div>
+  <div class="summary-box">
+    <div class="stitle">これまでの判断からタイプを診断</div>
+    <p class="report-desc">各款で下した「増額・維持・減額・廃止」の判断を、この端末・このブラウザの記録から分析します。統計的な調査ではなく、遊びの範囲の診断として楽しんでください。</p>
+    <button id="diag-btn" class="report-btn diag-btn">診断する</button>
+    <div id="diag-result" class="diag-result"></div>
+  </div>
+
   <div class="section-title">気になったことをレポートにする</div>
   <div class="summary-box">
     <div class="stitle">メモをまとめてダウンロード</div>
@@ -495,7 +508,8 @@ if('serviceWorker' in navigator){
 }
 
 (function(){
-  var REPORT_LOOKUP = {"minsei": {"name": "民生費", "save_key": "kessan_challenge_minsei_v1", "amounts": {"自立支援事業": 8670709976, "教育・保育給付事業": 7769403083, "児童手当給付事業": 5388668220, "生活保護援護事業": 4063403753, "認定こども園化推進事業": 1307394458, "児童扶養手当給付事業": 897917540, "こども医療費助成事業": 786156621, "定額減税補足給付事業": 777772204, "物価高対応子育て応援手当給付事業": 762520000, "乳幼児等医療費助成事業": 678537258, "保育園・認定こども園運営事業": 516487868, "地域生活支援事業": 355987565, "重度障害者（児）医療費助成事業（県）": 333058134, "若者応援クーポン給付事業": 273199248, "高齢重度障害者医療費助成事業（県）": 204247076, "保育施設等利用給付事業": 168516371, "保育士等確保事業": 154359458, "特別障害者手当等給付事業": 140170210, "障害者（児）医療費助成事業（市）": 134882540, "地域福祉活動推進事業": 114865124, "老人措置事業": 98667206, "子育て世帯応援お米商品券配付事業": 98634307, "障がい児保育事業": 95418000, "看護師配置事業": 89804000, "高齢障害者医療費助成事業（市）": 63000607, "療育事業": 60970911, "社会福祉施設等補助事業": 60157000, "認定こども園開園準備事業": 57486153, "成年後見制度利用支援事業": 56240438, "母子家庭等医療費助成事業": 53814290, "一時預かり事業": 52066180, "民生委員活動事業": 47187133, "生活困窮者自立支援事業": 38990955, "生きがい対策事業": 38952887, "母子・父子自立支援事業": 38887777, "住宅改造助成事業": 35855971, "少子化対策推進事業": 34957758, "育児休業復帰支援体制補助事業": 28431400, "保育所等物価高騰対策一時支援金交付事業": 26122000, "結婚支援事業": 25817472, "延長保育事業": 25756000, "要保護児童相談事業": 25547150, "教育・保育施設等利用者負担額軽減事業": 25496300, "病児・病後児保育事業": 24484332, "児童福祉施設措置事業": 24238647, "ファミリーサポートセンター運営事業": 17463572, "就学前教育・保育施設再編事業": 13702700, "人権啓発推進員活動事業": 13310633, "子育て相談事業": 12370080, "子ども・子育て支援事業": 12226061, "人権啓発事業": 11776660, "障害者差別解消事業": 11483957, "物価高対応子育て応援手当給付事務事業": 6719128, "地域支え合い体制づくり事業": 186200, "在宅医療・介護連携情報共有支援事業": 60500}}, "soumu": {"name": "総務費", "save_key": "kessan_challenge_soumu_v1", "amounts": {"広報事業": 50055022, "シティプロモーション推進事業": 22194669, "庁舎維持補修事業": 791848439, "公共施設維持補修事業": 141531720, "企画事務事業": 4832935, "加古川駅周辺賑わい創出事業": 9989390, "かわまちづくり推進事業": 332161703, "スマートシティ・ＤＸ推進事業": 29594522, "協働のまちづくり推進事業": 10605899, "ウェルピーポイント制度運営事業": 10636658, "地域課題調整事業": 9851440, "相談事業": 11014367, "防犯のまちづくり支援事業": 23138932, "ＩＣＴを活用した安全・安心のまちづくり推進事業": 268658712, "自治振興事業": 99718481, "自治集会所整備事業": 35470000, "文化活動振興事業": 15024625, "棋士のまち加古川事業": 40082422, "国際交流事業": 18847685, "（一財）加古川市ウェルネス協会補助等事業": 80931000, "ウェルネススポーツ推進事業": 26508434, "ウェルネス施設管理運営事業": 1264892741, "性の多様性尊重推進事業": 826510, "防災及び災害関係事業": 17223627, "災害情報伝達・収集システム事業": 47763329, "スマート手続推進事業": 11937318, "証明書等コンビニ交付事業": 26422926, "参議院議員選挙事業": 105407736, "国勢調査事業": 122870504}}, "kyouiku": {"name": "教育費", "save_key": "kessan_challenge_kyouiku_v1", "amounts": {"教育振興事業": 79270442, "小学校体験活動支援事業": 31612514, "英語活動支援事業": 94799669, "トライやる・ウィーク推進事業": 11915440, "スクールソーシャルワーカー活用事業": 11132155, "スクールサポートチーム活用事業": 13473541, "メンタルサポート事業": 103788526, "情報教育推進事業": 279163455, "小学校運営管理事業": 620837798, "小学校就学奨励事業": 87135512, "小学校建設事業": 196273100, "中学校運営管理事業": 269149591, "中学校就学奨励事業": 81342894, "中学校建設事業": 642303200, "特別支援教育推進事業": 86525027, "特別支援教育就学奨励事業": 20224230, "特別支援教育児童生徒サポート事業": 169143217, "教育施設等利用給付事業": 119535901, "幼稚園建設事業": 12373020, "社会教育委員、推進員設置事業": 11490769, "青少年活動支援事業": 1149239, "文化財調査事業": 15147021, "放課後児童健全育成事業": 830247451, "いのちと心サポート事業": 21445494, "不登校児童生徒支援事業": 12290561, "公民館建設事業": 477514100, "学校保健事業": 153479942, "交通安全指導員事業": 49404143, "学校給食費関連管理事業": 216153128}}, "kosai": {"name": "公債費", "save_key": "kessan_challenge_kosai_v1", "amounts": {"借入金元金償還事業": 8264569797, "借入金利子償還事業": 351429706}}, "shobo": {"name": "消防費", "save_key": "kessan_challenge_shobo_v1", "amounts": {"指令システム管理事業": 668873916, "消防施設維持補修事業": 30575930, "消防施設整備事業": 230710240}}, "doboku": {"name": "土木費", "save_key": "kessan_challenge_doboku_v1", "amounts": {"自転車対策事業": 107705787, "道路補修事業": 112474670, "小規模道路整備事業": 180807463, "交通安全施設維持整備事業": 37870713, "橋梁長寿命化修繕事業": 188430100, "道路新設改良事業": 231495624, "河川整備事業": 22655000, "総合交通政策事業": 437360310, "市街化調整区域のまちづくり支援事業": 21885294, "土地区画整理事業": 52344800, "中心市街地整備事業": 323850014, "加古川駅等周辺整備事業": 182386251, "厄神駅周辺整備事業": 87632400, "日岡駅周辺整備事業": 7678000, "加古川駅周辺地区まちづくり推進事業": 132407629, "街路事業": 1469423926, "一般排水路整備事業": 51158800, "公園建設事業": 167141222, "都市公園トイレ改修事業": 55154000, "市域図経年変化修正事業": 64790000, "耐震改修促進事業": 13265090, "空き家等対策事業": 12902960, "市営住宅整備事業": 311766420}}, "eisei": {"name": "衛生費", "save_key": "kessan_challenge_eisei_v1", "amounts": {"救急医療事業": 51191539, "地域保健医療情報システム事業": 39108656, "妊婦健康診査費助成事業": 168064679, "予防接種事業(乳幼児等)": 539827950, "予防接種事業(高齢者等)": 430850231, "保健推進事業": 151333712, "後期高齢者保健事業": 17058461, "後期高齢者医療健康診査事業": 103884769, "市町母子保健事業": 67222138, "不妊・不育症治療費助成事業": 26721476, "子育て世代包括支援センター事業": 17064001, "妊娠・出産包括支援事業": 20183344, "妊娠出産子育て支援事業": 179244364, "斎場整備事業": 102260, "大気環境保全事業": 43010481, "再生可能エネルギー利用設備設置費補助事業": 47566467, "電動車等普及促進事業": 911900, "ゼロカーボンパートナーシップ事業": 46320991, "あなたのエコ暮らし応援事業": 25236736, "ごみ減量化推進事業": 16052934, "塵芥収集管理事業": 20136332, "塵芥収集事業": 427027032, "資源物収集事業": 109037725, "粗大ごみ戸別収集事業": 23947131, "し尿収集管理事業": 92977930, "合併浄化槽設置補助事業": 122312277, "し尿収集車両購入事業": 20536160, "環境施設管理運営事業": 307498450, "マテリアルリサイクル推進施設整備事業": 63921000}}, "shoko": {"name": "商工費", "save_key": "kessan_challenge_shoko_v1", "amounts": {"ふるさと納税推進事業": 184206463, "旧公設地方卸売市場整理事業": 723574639, "企業融資対策事業": 174518236, "商工業振興一般事業": 521678600, "空き店舗等活用支援事業": 29128996, "企業立地促進奨励金交付事業": 17556000, "市内店舗応援事業": 50000000, "花火大会・地域のまつり支援事業": 61214292, "（一社）加古川観光協会補助事業": 47321086}}, "norinsuisan": {"name": "農林水産業費", "save_key": "kessan_challenge_norinsuisan_v1", "amounts": {"農業振興事業": 35551258, "農地保全対策事業": 13442200, "市内特産品等プロモーション推進事業": 1637100, "就農環境向上事業": 3366057, "加古川食肉センター管理運営負担事業": 105300000, "土地改良補助事業": 15584000, "多面的機能支払事業": 100263851, "林業振興事業": 19898893, "水産振興事業": 11432423}}, "gikai": {"name": "議会費", "save_key": "kessan_challenge_gikai_v1", "amounts": {"議員報酬・議会事務局職員人件費": 480004398, "議会運営に関する経費(政務活動費・委託料など)": 44953611}}, "roudo": {"name": "労働費", "save_key": "kessan_challenge_roudo_v1", "amounts": {"シルバー人材センター助成事業": 23880000, "雇用促進・就職支援事業": 24599508, "勤労者住宅資金融資対策事業": 130487000}}};
+  var REPORT_LOOKUP = {"minsei": {"name": "民生費", "save_key": "kessan_challenge_minsei_v1", "events": {"自立支援事業": {"amount": 8670709976, "tag": "扶助費中心"}, "教育・保育給付事業": {"amount": 7769403083, "tag": "扶助費中心"}, "児童手当給付事業": {"amount": 5388668220, "tag": "扶助費中心"}, "生活保護援護事業": {"amount": 4063403753, "tag": "扶助費中心"}, "認定こども園化推進事業": {"amount": 1307394458, "tag": "施設整備・工事中心"}, "児童扶養手当給付事業": {"amount": 897917540, "tag": "扶助費中心"}, "こども医療費助成事業": {"amount": 786156621, "tag": "扶助費中心"}, "定額減税補足給付事業": {"amount": 777772204, "tag": "扶助費中心"}, "物価高対応子育て応援手当給付事業": {"amount": 762520000, "tag": "扶助費中心"}, "乳幼児等医療費助成事業": {"amount": 678537258, "tag": "扶助費中心"}, "保育園・認定こども園運営事業": {"amount": 516487868, "tag": "人件費中心"}, "地域生活支援事業": {"amount": 355987565, "tag": "混在(扶助費・委託)"}, "重度障害者（児）医療費助成事業（県）": {"amount": 333058134, "tag": "扶助費中心"}, "若者応援クーポン給付事業": {"amount": 273199248, "tag": "委託中心"}, "高齢重度障害者医療費助成事業（県）": {"amount": 204247076, "tag": "扶助費中心"}, "保育施設等利用給付事業": {"amount": 168516371, "tag": "扶助費中心"}, "保育士等確保事業": {"amount": 154359458, "tag": "補助金中心"}, "特別障害者手当等給付事業": {"amount": 140170210, "tag": "扶助費中心"}, "障害者（児）医療費助成事業（市）": {"amount": 134882540, "tag": "扶助費中心"}, "地域福祉活動推進事業": {"amount": 114865124, "tag": "団体への負担金"}, "老人措置事業": {"amount": 98667206, "tag": "扶助費中心"}, "子育て世帯応援お米商品券配付事業": {"amount": 98634307, "tag": "委託中心"}, "障がい児保育事業": {"amount": 95418000, "tag": "補助金中心"}, "看護師配置事業": {"amount": 89804000, "tag": "補助金中心"}, "高齢障害者医療費助成事業（市）": {"amount": 63000607, "tag": "扶助費中心"}, "療育事業": {"amount": 60970911, "tag": "人件費中心"}, "社会福祉施設等補助事業": {"amount": 60157000, "tag": "補助金中心"}, "認定こども園開園準備事業": {"amount": 57486153, "tag": "施設整備・工事中心"}, "成年後見制度利用支援事業": {"amount": 56240438, "tag": "委託中心"}, "母子家庭等医療費助成事業": {"amount": 53814290, "tag": "扶助費中心"}, "一時預かり事業": {"amount": 52066180, "tag": "補助金中心"}, "民生委員活動事業": {"amount": 47187133, "tag": "団体への負担金"}, "生活困窮者自立支援事業": {"amount": 38990955, "tag": "委託中心"}, "生きがい対策事業": {"amount": 38952887, "tag": "補助金中心"}, "母子・父子自立支援事業": {"amount": 38887777, "tag": "扶助費中心"}, "住宅改造助成事業": {"amount": 35855971, "tag": "補助金中心"}, "少子化対策推進事業": {"amount": 34957758, "tag": "委託中心"}, "育児休業復帰支援体制補助事業": {"amount": 28431400, "tag": "補助金中心"}, "保育所等物価高騰対策一時支援金交付事業": {"amount": 26122000, "tag": "補助金中心"}, "結婚支援事業": {"amount": 25817472, "tag": "補助金中心"}, "延長保育事業": {"amount": 25756000, "tag": "補助金中心"}, "要保護児童相談事業": {"amount": 25547150, "tag": "人件費中心"}, "教育・保育施設等利用者負担額軽減事業": {"amount": 25496300, "tag": "補助金中心"}, "病児・病後児保育事業": {"amount": 24484332, "tag": "補助金中心"}, "児童福祉施設措置事業": {"amount": 24238647, "tag": "扶助費中心"}, "ファミリーサポートセンター運営事業": {"amount": 17463572, "tag": "委託中心"}, "就学前教育・保育施設再編事業": {"amount": 13702700, "tag": "委託中心"}, "人権啓発推進員活動事業": {"amount": 13310633, "tag": "人件費中心"}, "子育て相談事業": {"amount": 12370080, "tag": "委託中心"}, "子ども・子育て支援事業": {"amount": 12226061, "tag": "その他(償還金中心)"}, "人権啓発事業": {"amount": 11776660, "tag": "委託中心"}, "障害者差別解消事業": {"amount": 11483957, "tag": "委託中心"}, "物価高対応子育て応援手当給付事務事業": {"amount": 6719128, "tag": "人件費中心"}, "地域支え合い体制づくり事業": {"amount": 186200, "tag": "補助金中心"}, "在宅医療・介護連携情報共有支援事業": {"amount": 60500, "tag": "委託中心"}}}, "soumu": {"name": "総務費", "save_key": "kessan_challenge_soumu_v1", "events": {"広報事業": {"amount": 50055022, "tag": "委託中心"}, "シティプロモーション推進事業": {"amount": 22194669, "tag": "委託中心"}, "庁舎維持補修事業": {"amount": 791848439, "tag": "施設整備・工事中心"}, "公共施設維持補修事業": {"amount": 141531720, "tag": "施設整備・工事中心"}, "企画事務事業": {"amount": 4832935, "tag": "委託中心"}, "加古川駅周辺賑わい創出事業": {"amount": 9989390, "tag": "委託中心"}, "かわまちづくり推進事業": {"amount": 332161703, "tag": "施設整備・工事中心"}, "スマートシティ・ＤＸ推進事業": {"amount": 29594522, "tag": "委託中心"}, "協働のまちづくり推進事業": {"amount": 10605899, "tag": "補助金中心"}, "ウェルピーポイント制度運営事業": {"amount": 10636658, "tag": "委託中心"}, "地域課題調整事業": {"amount": 9851440, "tag": "維持補修中心"}, "相談事業": {"amount": 11014367, "tag": "委託中心"}, "防犯のまちづくり支援事業": {"amount": 23138932, "tag": "委託中心"}, "ＩＣＴを活用した安全・安心のまちづくり推進事業": {"amount": 268658712, "tag": "委託中心"}, "自治振興事業": {"amount": 99718481, "tag": "委託中心"}, "自治集会所整備事業": {"amount": 35470000, "tag": "補助金中心"}, "文化活動振興事業": {"amount": 15024625, "tag": "委託中心"}, "棋士のまち加古川事業": {"amount": 40082422, "tag": "委託中心"}, "国際交流事業": {"amount": 18847685, "tag": "委託中心"}, "（一財）加古川市ウェルネス協会補助等事業": {"amount": 80931000, "tag": "団体への負担金"}, "ウェルネススポーツ推進事業": {"amount": 26508434, "tag": "委託中心"}, "ウェルネス施設管理運営事業": {"amount": 1264892741, "tag": "施設整備・工事中心"}, "性の多様性尊重推進事業": {"amount": 826510, "tag": "委託中心"}, "防災及び災害関係事業": {"amount": 17223627, "tag": "維持補修中心"}, "災害情報伝達・収集システム事業": {"amount": 47763329, "tag": "委託中心"}, "スマート手続推進事業": {"amount": 11937318, "tag": "委託中心"}, "証明書等コンビニ交付事業": {"amount": 26422926, "tag": "委託中心"}, "参議院議員選挙事業": {"amount": 105407736, "tag": "委託中心"}, "国勢調査事業": {"amount": 122870504, "tag": "人件費中心"}}}, "kyouiku": {"name": "教育費", "save_key": "kessan_challenge_kyouiku_v1", "events": {"教育振興事業": {"amount": 79270442, "tag": "人件費中心"}, "小学校体験活動支援事業": {"amount": 31612514, "tag": "委託中心"}, "英語活動支援事業": {"amount": 94799669, "tag": "委託中心"}, "トライやる・ウィーク推進事業": {"amount": 11915440, "tag": "委託中心"}, "スクールソーシャルワーカー活用事業": {"amount": 11132155, "tag": "人件費中心"}, "スクールサポートチーム活用事業": {"amount": 13473541, "tag": "人件費中心"}, "メンタルサポート事業": {"amount": 103788526, "tag": "人件費中心"}, "情報教育推進事業": {"amount": 279163455, "tag": "委託中心"}, "小学校運営管理事業": {"amount": 620837798, "tag": "委託中心"}, "小学校就学奨励事業": {"amount": 87135512, "tag": "補助金中心"}, "小学校建設事業": {"amount": 196273100, "tag": "施設整備・工事中心"}, "中学校運営管理事業": {"amount": 269149591, "tag": "委託中心"}, "中学校就学奨励事業": {"amount": 81342894, "tag": "補助金中心"}, "中学校建設事業": {"amount": 642303200, "tag": "施設整備・工事中心"}, "特別支援教育推進事業": {"amount": 86525027, "tag": "人件費中心"}, "特別支援教育就学奨励事業": {"amount": 20224230, "tag": "補助金中心"}, "特別支援教育児童生徒サポート事業": {"amount": 169143217, "tag": "人件費中心"}, "教育施設等利用給付事業": {"amount": 119535901, "tag": "補助金中心"}, "幼稚園建設事業": {"amount": 12373020, "tag": "委託中心"}, "社会教育委員、推進員設置事業": {"amount": 11490769, "tag": "人件費中心"}, "青少年活動支援事業": {"amount": 1149239, "tag": "委託中心"}, "文化財調査事業": {"amount": 15147021, "tag": "委託中心"}, "放課後児童健全育成事業": {"amount": 830247451, "tag": "人件費中心"}, "いのちと心サポート事業": {"amount": 21445494, "tag": "人件費中心"}, "不登校児童生徒支援事業": {"amount": 12290561, "tag": "人件費中心"}, "公民館建設事業": {"amount": 477514100, "tag": "施設整備・工事中心"}, "学校保健事業": {"amount": 153479942, "tag": "人件費中心"}, "交通安全指導員事業": {"amount": 49404143, "tag": "人件費中心"}, "学校給食費関連管理事業": {"amount": 216153128, "tag": "繰出金中心"}}}, "kosai": {"name": "公債費", "save_key": "kessan_challenge_kosai_v1", "events": {"借入金元金償還事業": {"amount": 8264569797, "tag": "契約に基づく返済"}, "借入金利子償還事業": {"amount": 351429706, "tag": "契約に基づく返済"}}}, "shobo": {"name": "消防費", "save_key": "kessan_challenge_shobo_v1", "events": {"指令システム管理事業": {"amount": 668873916, "tag": "施設整備・工事中心"}, "消防施設維持補修事業": {"amount": 30575930, "tag": "維持補修中心"}, "消防施設整備事業": {"amount": 230710240, "tag": "施設整備・工事中心"}}}, "doboku": {"name": "土木費", "save_key": "kessan_challenge_doboku_v1", "events": {"自転車対策事業": {"amount": 107705787, "tag": "委託中心"}, "道路補修事業": {"amount": 112474670, "tag": "委託中心"}, "小規模道路整備事業": {"amount": 180807463, "tag": "施設整備・工事中心"}, "交通安全施設維持整備事業": {"amount": 37870713, "tag": "施設整備・工事中心"}, "橋梁長寿命化修繕事業": {"amount": 188430100, "tag": "施設整備・工事中心"}, "道路新設改良事業": {"amount": 231495624, "tag": "用地買収・補償中心"}, "河川整備事業": {"amount": 22655000, "tag": "施設整備・工事中心"}, "総合交通政策事業": {"amount": 437360310, "tag": "補助金中心"}, "市街化調整区域のまちづくり支援事業": {"amount": 21885294, "tag": "委託中心"}, "土地区画整理事業": {"amount": 52344800, "tag": "補助金中心"}, "中心市街地整備事業": {"amount": 323850014, "tag": "用地買収・補償中心"}, "加古川駅等周辺整備事業": {"amount": 182386251, "tag": "施設整備・工事中心"}, "厄神駅周辺整備事業": {"amount": 87632400, "tag": "施設整備・工事中心"}, "日岡駅周辺整備事業": {"amount": 7678000, "tag": "委託中心"}, "加古川駅周辺地区まちづくり推進事業": {"amount": 132407629, "tag": "委託中心"}, "街路事業": {"amount": 1469423926, "tag": "施設整備・工事中心"}, "一般排水路整備事業": {"amount": 51158800, "tag": "維持補修中心"}, "公園建設事業": {"amount": 167141222, "tag": "施設整備・工事中心"}, "都市公園トイレ改修事業": {"amount": 55154000, "tag": "施設整備・工事中心"}, "市域図経年変化修正事業": {"amount": 64790000, "tag": "委託中心"}, "耐震改修促進事業": {"amount": 13265090, "tag": "補助金中心"}, "空き家等対策事業": {"amount": 12902960, "tag": "行政手続き費用中心"}, "市営住宅整備事業": {"amount": 311766420, "tag": "施設整備・工事中心"}}}, "eisei": {"name": "衛生費", "save_key": "kessan_challenge_eisei_v1", "events": {"救急医療事業": {"amount": 51191539, "tag": "委託中心"}, "地域保健医療情報システム事業": {"amount": 39108656, "tag": "団体への負担金"}, "妊婦健康診査費助成事業": {"amount": 168064679, "tag": "補助金中心"}, "予防接種事業(乳幼児等)": {"amount": 539827950, "tag": "委託中心"}, "予防接種事業(高齢者等)": {"amount": 430850231, "tag": "委託中心"}, "保健推進事業": {"amount": 151333712, "tag": "委託中心"}, "後期高齢者保健事業": {"amount": 17058461, "tag": "人件費中心"}, "後期高齢者医療健康診査事業": {"amount": 103884769, "tag": "委託中心"}, "市町母子保健事業": {"amount": 67222138, "tag": "混在(人件費・委託・扶助費)"}, "不妊・不育症治療費助成事業": {"amount": 26721476, "tag": "補助金中心"}, "子育て世代包括支援センター事業": {"amount": 17064001, "tag": "人件費中心"}, "妊娠・出産包括支援事業": {"amount": 20183344, "tag": "委託中心"}, "妊娠出産子育て支援事業": {"amount": 179244364, "tag": "補助金中心"}, "斎場整備事業": {"amount": 102260, "tag": "人件費中心"}, "大気環境保全事業": {"amount": 43010481, "tag": "委託中心"}, "再生可能エネルギー利用設備設置費補助事業": {"amount": 47566467, "tag": "補助金中心"}, "電動車等普及促進事業": {"amount": 911900, "tag": "施設整備・工事中心"}, "ゼロカーボンパートナーシップ事業": {"amount": 46320991, "tag": "補助金中心"}, "あなたのエコ暮らし応援事業": {"amount": 25236736, "tag": "補助金中心"}, "ごみ減量化推進事業": {"amount": 16052934, "tag": "補助金中心"}, "塵芥収集管理事業": {"amount": 20136332, "tag": "委託中心"}, "塵芥収集事業": {"amount": 427027032, "tag": "委託中心"}, "資源物収集事業": {"amount": 109037725, "tag": "委託中心"}, "粗大ごみ戸別収集事業": {"amount": 23947131, "tag": "委託中心"}, "し尿収集管理事業": {"amount": 92977930, "tag": "委託中心"}, "合併浄化槽設置補助事業": {"amount": 122312277, "tag": "補助金中心"}, "し尿収集車両購入事業": {"amount": 20536160, "tag": "施設整備・工事中心"}, "環境施設管理運営事業": {"amount": 307498450, "tag": "委託中心"}, "マテリアルリサイクル推進施設整備事業": {"amount": 63921000, "tag": "施設整備・工事中心"}}}, "shoko": {"name": "商工費", "save_key": "kessan_challenge_shoko_v1", "events": {"ふるさと納税推進事業": {"amount": 184206463, "tag": "市の直接実施"}, "旧公設地方卸売市場整理事業": {"amount": 723574639, "tag": "施設整備・工事中心"}, "企業融資対策事業": {"amount": 174518236, "tag": "貸付・融資中心"}, "商工業振興一般事業": {"amount": 521678600, "tag": "出資金中心"}, "空き店舗等活用支援事業": {"amount": 29128996, "tag": "補助金中心"}, "企業立地促進奨励金交付事業": {"amount": 17556000, "tag": "補助金中心"}, "市内店舗応援事業": {"amount": 50000000, "tag": "補助金中心"}, "花火大会・地域のまつり支援事業": {"amount": 61214292, "tag": "委託中心"}, "（一社）加古川観光協会補助事業": {"amount": 47321086, "tag": "団体への負担金"}}}, "norinsuisan": {"name": "農林水産業費", "save_key": "kessan_challenge_norinsuisan_v1", "events": {"農業振興事業": {"amount": 35551258, "tag": "補助金中心"}, "農地保全対策事業": {"amount": 13442200, "tag": "委託中心"}, "市内特産品等プロモーション推進事業": {"amount": 1637100, "tag": "市の直接実施"}, "就農環境向上事業": {"amount": 3366057, "tag": "補助金中心"}, "加古川食肉センター管理運営負担事業": {"amount": 105300000, "tag": "団体への負担金"}, "土地改良補助事業": {"amount": 15584000, "tag": "補助金中心"}, "多面的機能支払事業": {"amount": 100263851, "tag": "補助金中心"}, "林業振興事業": {"amount": 19898893, "tag": "委託中心"}, "水産振興事業": {"amount": 11432423, "tag": "補助金と委託の混在"}}}, "gikai": {"name": "議会費", "save_key": "kessan_challenge_gikai_v1", "events": {"議員報酬・議会事務局職員人件費": {"amount": 480004398, "tag": "人件費"}, "議会運営に関する経費(政務活動費・委託料など)": {"amount": 44953611, "tag": "混在(政務活動費など)"}}}, "roudo": {"name": "労働費", "save_key": "kessan_challenge_roudo_v1", "events": {"シルバー人材センター助成事業": {"amount": 23880000, "tag": "補助金中心"}, "雇用促進・就職支援事業": {"amount": 24599508, "tag": "補助金中心"}, "勤労者住宅資金融資対策事業": {"amount": 130487000, "tag": "貸付・融資中心"}}}};
+  var TAG_BUCKET = {"扶助費中心": "福祉・給付系", "人件費中心": "人件費系", "委託中心": "委託・運営系", "市の直接実施": "委託・運営系", "補助金中心": "補助金・団体支援系", "団体への負担金": "補助金・団体支援系", "出資金中心": "補助金・団体支援系", "施設整備・工事中心": "インフラ・施設系", "維持補修中心": "インフラ・施設系", "用地買収・補償中心": "インフラ・施設系"};
 
   function fmtOku(yen){
     var v = yen/1e8;
@@ -509,17 +523,9 @@ if('serviceWorker' in navigator){
     return sign + '約' + Math.round(a).toLocaleString() + '円';
   }
 
-  document.getElementById('report-btn').addEventListener('click', function(){
-    var statusEl = document.getElementById('report-status');
-    var lines = [];
-    lines.push('# カコモと学ぶ 決算チャレンジ — 気になったことレポート');
-    lines.push('');
-    lines.push('生成日: ' + new Date().toLocaleDateString('ja-JP'));
-    lines.push('');
-
-    var totalCount = 0;
-    var totalDelta = 0;
-
+  // 全款のjudged/memosを集める共通関数
+  function collectAll(){
+    var all = {judgedList: [], memoList: []};
     Object.keys(REPORT_LOOKUP).forEach(function(key){
       var kan = REPORT_LOOKUP[key];
       var raw;
@@ -529,15 +535,67 @@ if('serviceWorker' in navigator){
       try { data = JSON.parse(raw); } catch(e) { return; }
       var memos = data.memos || {};
       var judged = data.judged || {};
-      var memoKeys = Object.keys(memos).filter(function(k){ return memos[k] && memos[k].trim(); });
-      if(memoKeys.length === 0) return;
+      Object.keys(judged).forEach(function(jigyo){
+        var ev = kan.events[jigyo] || {};
+        all.judgedList.push({
+          kan: kan.name, jigyo: jigyo, mode: judged[jigyo].mode,
+          delta: judged[jigyo].delta, mandatory: judged[jigyo].mandatory,
+          amount: ev.amount, tag: ev.tag
+        });
+      });
+      Object.keys(memos).forEach(function(jigyo){
+        if(memos[jigyo] && memos[jigyo].trim()){
+          all.memoList.push({kan: kan.name, jigyo: jigyo, memo: memos[jigyo].trim(), amount: (kan.events[jigyo]||{}).amount, judged: judged[jigyo]});
+        }
+      });
+    });
+    return all;
+  }
 
-      lines.push('## ' + kan.name);
+  function findClosestEvent(targetAmount){
+    var best = null, bestDiff = Infinity;
+    Object.keys(REPORT_LOOKUP).forEach(function(key){
+      var kan = REPORT_LOOKUP[key];
+      Object.keys(kan.events).forEach(function(jigyo){
+        var amt = kan.events[jigyo].amount;
+        if(amt == null || amt <= 0) return;
+        var diff = Math.abs(amt - targetAmount);
+        if(diff < bestDiff){ bestDiff = diff; best = {kan: kan.name, jigyo: jigyo, amount: amt}; }
+      });
+    });
+    return best;
+  }
+
+  /* ---------- レポート ---------- */
+  document.getElementById('report-btn').addEventListener('click', function(){
+    var statusEl = document.getElementById('report-status');
+    var all = collectAll();
+    var memoList = all.memoList;
+
+    if(memoList.length === 0){
+      statusEl.textContent = 'まだメモが1件も見つかりませんでした。各款のページでメモを書いてから、もう一度お試しください。';
+      return;
+    }
+
+    var lines = [];
+    lines.push('# カコモと学ぶ 決算チャレンジ — 気になったことレポート');
+    lines.push('');
+    lines.push('生成日: ' + new Date().toLocaleDateString('ja-JP'));
+    lines.push('');
+
+    var byKan = {};
+    memoList.forEach(function(m){
+      if(!byKan[m.kan]) byKan[m.kan] = [];
+      byKan[m.kan].push(m);
+    });
+
+    var totalDelta = 0;
+    Object.keys(byKan).forEach(function(kanName){
+      lines.push('## ' + kanName);
       lines.push('');
-      memoKeys.forEach(function(jigyo){
-        var amount = kan.amounts[jigyo];
-        var j = judged[jigyo];
-        lines.push('### ' + jigyo + (amount != null ? '(決算額 ' + fmtAmount(amount) + ')' : ''));
+      byKan[kanName].forEach(function(m){
+        lines.push('### ' + m.jigyo + (m.amount != null ? '(決算額 ' + fmtAmount(m.amount) + ')' : ''));
+        var j = m.judged;
         if(j){
           var deltaText = j.mandatory ? '(法定givのため影響額なし)' : (j.delta !== 0 ? '(' + (j.delta >= 0 ? '+' : '') + fmtAmount(j.delta) + ')' : '(影響額 0円)');
           lines.push('- 判断: ' + j.mode + ' ' + deltaText);
@@ -545,21 +603,23 @@ if('serviceWorker' in navigator){
         } else {
           lines.push('- 判断: (未確定)');
         }
-        lines.push('- メモ: ' + memos[jigyo].trim());
+        lines.push('- メモ: ' + m.memo);
         lines.push('');
-        totalCount++;
       });
     });
 
-    if(totalCount === 0){
-      statusEl.textContent = 'まだメモが1件も見つかりませんでした。各款のページでメモを書いてから、もう一度お試しください。';
-      return;
-    }
-
     lines.push('---');
     lines.push('');
-    lines.push('メモを書いた事業: ' + totalCount + '件');
+    lines.push('メモを書いた事業: ' + memoList.length + '件');
     lines.push('削った予算の合計影響額(法定giv・未確定を除く): ' + (totalDelta >= 0 ? '+' : '') + fmtAmount(totalDelta));
+
+    if(totalDelta < 0){
+      var closest = findClosestEvent(Math.abs(totalDelta));
+      if(closest){
+        lines.push('');
+        lines.push('※規模感の参考: あなたが削った金額の合計(' + fmtAmount(Math.abs(totalDelta)) + ')は、' + closest.kan + 'の「' + closest.jigyo + '」(決算額 ' + fmtAmount(closest.amount) + ')とだいたい同じくらいの規模です。');
+      }
+    }
 
     var blob = new Blob([lines.join('\n')], {type: 'text/markdown;charset=utf-8'});
     var url = URL.createObjectURL(blob);
@@ -570,9 +630,80 @@ if('serviceWorker' in navigator){
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    statusEl.textContent = totalCount + '件のメモをレポートにまとめました。';
+    statusEl.textContent = memoList.length + '件のメモをレポートにまとめました。';
   });
+
+  /* ---------- 決算タイプ診断 ---------- */
+  var diagBtn = document.getElementById('diag-btn');
+  if(diagBtn){
+    diagBtn.addEventListener('click', function(){
+      var resultEl = document.getElementById('diag-result');
+      var all = collectAll();
+      var judgedList = all.judgedList;
+
+      if(judgedList.length === 0){
+        resultEl.innerHTML = '<p class="diag-empty">まだ判断が1件も見つかりませんでした。各款のページで事業を判断してから、もう一度お試しください。</p>';
+        return;
+      }
+
+      var cutCount = 0, keepCount = 0, upCount = 0;
+      var bucketCut = {};
+      var kanCut = {};
+      judgedList.forEach(function(j){
+        if(j.mode === '減額' || j.mode === '廃止'){
+          cutCount++;
+          if(!j.mandatory){
+            var bucket = TAG_BUCKET[j.tag] || 'その他';
+            bucketCut[bucket] = (bucketCut[bucket]||0) + 1;
+            kanCut[j.kan] = (kanCut[j.kan]||0) + 1;
+          }
+        } else if(j.mode === '維持'){
+          keepCount++;
+        } else if(j.mode === '増額'){
+          upCount++;
+        }
+      });
+      var total = judgedList.length;
+      var cutRate = cutCount/total;
+      var keepRate = keepCount/total;
+
+      var type, desc;
+      if(upCount > cutCount && upCount > 0){
+        type = '拡張派';
+        desc = '増額の判断が目立ちます。未来への投資を重視するタイプかもしれません。';
+      } else if(cutRate >= 0.5){
+        type = '改革派';
+        desc = '半分以上の事業に「減額」「廃止」の判断を下しています。無駄を見つけたら大胆に切り込むタイプです。';
+      } else if(keepRate >= 0.6){
+        type = '堅実派';
+        desc = '「維持」の判断が中心です。急激な変化より、今のバランスを大事にするタイプです。';
+      } else {
+        type = 'バランス型';
+        desc = '増額・維持・減額をバランスよく使い分けています。事業ごとにフラットに向き合うタイプです。';
+      }
+
+      var topBucket = null, topBucketCount = 0;
+      Object.keys(bucketCut).forEach(function(b){
+        if(bucketCut[b] > topBucketCount){ topBucket = b; topBucketCount = bucketCut[b]; }
+      });
+      var topKan = null, topKanCount = 0;
+      Object.keys(kanCut).forEach(function(k){
+        if(kanCut[k] > topKanCount){ topKan = k; topKanCount = kanCut[k]; }
+      });
+
+      var html2 = '<div class="diag-type">' + type + '</div>';
+      html2 += '<p class="diag-desc">' + desc + '</p>';
+      html2 += '<p class="diag-stat">判断した事業: ' + total + '件(増額' + upCount + '・維持' + keepCount + '・減額/廃止' + cutCount + ')</p>';
+      if(topBucket && topBucketCount >= 2){
+        html2 += '<p class="diag-stat">特に「' + topBucket + '」の事業に厳しい判断をする傾向があります(' + topBucketCount + '件)。</p>';
+      }
+      if(topKan && topKanCount >= 2){
+        html2 += '<p class="diag-stat">款で見ると、' + topKan + 'への削減判断が最も多くなっています。</p>';
+      }
+      resultEl.innerHTML = html2;
+    });
+  }
 })();
-</script>
+</script>ipt>
 </body>
 </html>

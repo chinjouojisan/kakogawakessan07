@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kessan-challenge-hub-v11';
+const CACHE_NAME = 'kessan-challenge-hub-v12';
 const ASSETS = [
   './',
   './index.html',
