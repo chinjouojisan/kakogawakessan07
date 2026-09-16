@@ -479,6 +479,12 @@
     </div>
   </div>
 
+  <div class="section-title">全体の規模感</div>
+  <div class="summary-box">
+    <div class="stitle">11款まとめての規模感</div>
+    <p id="overall-scale" class="report-desc">この端末・このブラウザでまだ判断が記録されていません。各款のシミュレーションで判断すると、ここに規模感の参考が表示されます。</p>
+  </div>
+
   <div class="section-title">あなたの決算タイプを診断する</div>
   <div class="summary-box">
     <div class="stitle">これまでの判断からタイプを診断</div>
@@ -626,6 +632,21 @@ if('serviceWorker' in navigator){
     });
     return best;
   }
+
+  (function renderOverallScale(){
+    var el = document.getElementById('overall-scale');
+    if(!el) return;
+    var all = collectAll();
+    var totalDelta = 0, judgedCount = 0;
+    all.judgedList.forEach(function(j){
+      judgedCount++;
+      if(!j.mandatory) totalDelta += (j.delta || 0);
+    });
+    if(judgedCount === 0 || totalDelta === 0) return;
+    var closest = findClosestEvent(Math.abs(totalDelta));
+    if(!closest) return;
+    el.textContent = '11款まとめて、これまで判断した' + judgedCount + '件の増減影響額の合計(' + fmtAmount(Math.abs(totalDelta)) + 'の' + (totalDelta < 0 ? '削減' : '増額') + ')は、' + closest.kan + 'の「' + closest.jigyo + '」(決算額 ' + fmtAmount(closest.amount) + ')とだいたい同じくらいの規模です。';
+  })();
 
   /* ---------- レポート ---------- */
   document.getElementById('report-btn').addEventListener('click', function(){
