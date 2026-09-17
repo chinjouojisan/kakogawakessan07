@@ -244,7 +244,7 @@
   </div>
 
   <div class="legend">
-    <span><i class="c-houtei"></i>法定giv</span>
+    <span><i class="c-houtei"></i>法定給付</span>
     <span><i class="c-sairyou"></i>裁量</span>
     <span><i class="c-mienai"></i>カード外</span>
   </div>
@@ -465,10 +465,10 @@
         </div>
       </details>
       <details class="acc-item">
-        <summary>法定givと裁量、何が動かせるのか</summary>
+        <summary>法定給付と裁量、何が動かせるのか</summary>
         <div class="acc-body">
-      <p>法律や条例で金額がほぼ決まっている「法定giv」と、市の判断で増減できる「裁量」の事業を分けてみると、款によって性格がかなり違います。公債費(借金の返済)と議会費(人件費・政務活動費)は、事業カードで見る限り100%が法定givです。</p>
-      <p>逆に土木費・消防費・商工費・農林水産業費・労働費は、事業カードで把握できる範囲では法定giv0%、つまり理論上はすべて市の判断で増減できる裁量事業です。ただし実際には、道路や消防のように「削ると生活に直結する」事業も多く、制度上「裁量」でも実質的には削りにくいお金もあります。</p>
+      <p>法律や条例で金額がほぼ決まっている「法定給付」と、市の判断で増減できる「裁量」の事業を分けてみると、款によって性格がかなり違います。公債費(借金の返済)と議会費(人件費・政務活動費)は、事業カードで見る限り100%が法定給付です。</p>
+      <p>逆に土木費・消防費・商工費・農林水産業費・労働費は、事業カードで把握できる範囲では法定給付0%、つまり理論上はすべて市の判断で増減できる裁量事業です。ただし実際には、道路や消防のように「削ると生活に直結する」事業も多く、制度上「裁量」でも実質的には削りにくいお金もあります。</p>
         </div>
       </details>
       <details class="acc-item">
@@ -487,11 +487,11 @@
     <p id="overall-scale" class="report-desc">この端末・このブラウザでまだ判断が記録されていません。各款のシミュレーションで判断すると、ここに規模感の参考が表示されます。</p>
   </div>
 
-  <div class="section-title">あなたの決算タイプを診断する</div>
+  <div class="section-title">今回の判断の傾向を見る</div>
   <div class="summary-box">
-    <div class="stitle">これまでの判断からタイプを診断</div>
-    <p class="report-desc">各款で下した「増額・維持・減額・廃止」の判断を、この端末・このブラウザの記録から分析します。統計的な調査ではなく、遊びの範囲の診断として楽しんでください。</p>
-    <button id="diag-btn" class="report-btn diag-btn">診断する</button>
+    <div class="stitle">これまでの判断から傾向を集計</div>
+    <p class="report-desc">各款で下した「増額・維持・減額・廃止」の判断を、この端末・このブラウザの記録から集計します。性格診断や統計的な調査ではなく、今回の判断内容を振り返るための遊びの範囲の結果です。</p>
+    <button id="diag-btn" class="report-btn diag-btn">傾向を見る</button>
     <div id="diag-result" class="diag-result"></div>
   </div>
 
@@ -515,7 +515,7 @@
     </details>
     <details style="margin-top:6px;">
       <summary style="cursor:pointer; font-size:13px; font-weight:600; color:var(--navy);">免責事項</summary>
-      <p style="font-size:12px; line-height:1.8; color:var(--ink-soft); margin:6px 0 0;">このサイトは、加古川生まれのカコモが案内する、市民有志による<strong>加古川市の非公式コンテンツ</strong>です。加古川市が公式に作成・監修したものではありません。<br><br>本サイトはAI(Claude)による決算資料の分析を含みます。数値は加古川市公表の決算関連資料に基づいていますが、詳細な検証や解釈の相違については各款のページ内の注記もあわせてご確認ください。</p>
+      <p style="font-size:12px; line-height:1.8; color:var(--ink-soft); margin:6px 0 0;">このサイトは、加古川生まれのカコモが案内する、市民有志による<strong>加古川市の非公式コンテンツ</strong>です。加古川市が公式に作成・監修したものではありません。<br><br>このサイトの情報は次の3種類に分かれます。①決算額などの数値は、加古川市が公表した決算資料からそのまま抜き出したものです。②レポートのコメント・規模感の参考・診断結果の説明文などは、AI(Claude、Anthropic社)が生成したもので、誤りを含む可能性があります。③法定給付/裁量の分類(「法律名が事業概要に明記されている場合のみ法定」という基準)や性質別の区分、支出形態タグは、AI(Claude)が事業概要等を読み取って判定したものであり、加古川市の公式な分類ではありません。詳細な検証や解釈の相違については各款のページ内の注記もあわせてご確認ください。</p>
     </details>
     <details style="margin-top:6px;">
       <summary style="cursor:pointer; font-size:13px; font-weight:600; color:var(--navy);">個人情報について</summary>
@@ -701,7 +701,7 @@ if('serviceWorker' in navigator){
         lines.push('### ' + m.jigyo + (m.amount != null ? '(決算額 ' + fmtAmount(m.amount) + ')' : ''));
         var j = m.judged;
         if(j){
-          var deltaText = j.mandatory ? '(法定givのため影響額なし)' : (j.delta !== 0 ? '(' + (j.delta >= 0 ? '+' : '') + fmtAmount(j.delta) + ')' : '(影響額 0円)');
+          var deltaText = j.mandatory ? '(法定給付のため影響額なし)' : (j.delta !== 0 ? '(' + (j.delta >= 0 ? '+' : '') + fmtAmount(j.delta) + ')' : '(影響額 0円)');
           lines.push('- 判断: ' + j.mode + ' ' + deltaText);
           if(!j.mandatory) totalDelta += j.delta;
         } else {
@@ -715,7 +715,7 @@ if('serviceWorker' in navigator){
     lines.push('---');
     lines.push('');
     lines.push('メモを書いた事業: ' + memoList.length + '件');
-    lines.push('削った予算の合計影響額(法定giv・未確定を除く): ' + (totalDelta >= 0 ? '+' : '') + fmtAmount(totalDelta));
+    lines.push('削った予算の合計影響額(法定給付・未確定を除く): ' + (totalDelta >= 0 ? '+' : '') + fmtAmount(totalDelta));
 
     if(totalDelta < 0){
       var closest = findClosestEvent(Math.abs(totalDelta));
@@ -773,17 +773,17 @@ if('serviceWorker' in navigator){
 
       var type, desc;
       if(upCount > cutCount && upCount > 0){
-        type = '拡張派';
-        desc = '増額の判断が目立ちます。未来への投資を重視するタイプかもしれません。';
+        type = '拡張型';
+        desc = '今回は増額の判断が目立ちました。未来への投資を重視する判断が多かったようです。';
       } else if(cutRate >= 0.5){
-        type = '改革派';
-        desc = '半分以上の事業に「減額」「廃止」の判断を下しています。無駄を見つけたら大胆に切り込むタイプです。';
+        type = '改革型';
+        desc = '今回は半分以上の事業に「減額」「廃止」の判断を下しました。無駄を見つけたら大胆に切り込む判断が多かったようです。';
       } else if(keepRate >= 0.6){
-        type = '堅実派';
-        desc = '「維持」の判断が中心です。急激な変化より、今のバランスを大事にするタイプです。';
+        type = '堅実型';
+        desc = '今回は「維持」の判断が中心でした。急激な変化より、今のバランスを大事にする判断が多かったようです。';
       } else {
         type = 'バランス型';
-        desc = '増額・維持・減額をバランスよく使い分けています。事業ごとにフラットに向き合うタイプです。';
+        desc = '今回は増額・維持・減額をバランスよく使い分けました。事業ごとにフラットに向き合う判断が多かったようです。';
       }
 
       var topBucket = null, topBucketCount = 0;
@@ -795,7 +795,7 @@ if('serviceWorker' in navigator){
         if(kanCut[k] > topKanCount){ topKan = k; topKanCount = kanCut[k]; }
       });
 
-      var html2 = '<div class="diag-type">' + type + '</div>';
+      var html2 = '<div class="diag-type">今回の傾向: ' + type + '</div>';
       html2 += '<p class="diag-desc">' + desc + '</p>';
       html2 += '<p class="diag-stat">判断した事業: ' + total + '件(増額' + upCount + '・維持' + keepCount + '・減額/廃止' + cutCount + ')</p>';
       if(topBucket && topBucketCount >= 2){
@@ -808,6 +808,6 @@ if('serviceWorker' in navigator){
     });
   }
 })();
-</script>ipt>
+</script>
 </body>
 </html>
